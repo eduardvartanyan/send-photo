@@ -12,6 +12,12 @@ if(isset($_SESSION['sentCount'])) {
 
             try{
 
+                if(!file_exists('.\images\\')) {
+
+                    mkdir('.\images\\');
+
+                }
+
                 move_uploaded_file($_FILES['photo']['tmp_name'], ".\images\\" . $_FILES['photo']['name']);
                 $_SESSION['sentCount']++;
 
