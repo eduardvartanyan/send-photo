@@ -12,16 +12,32 @@ if(isset($_SESSION['sentCount'])) {
 
             try{
 
-                if(!file_exists('.\images\\')) {
+                if(($_FILES['photo']['type'] == 'image/jpeg') || ($_FILES['photo']['type'] == 'image/png')) {
 
-                    mkdir('.\images\\');
+                    if($_FILES['photo']['size'] <= 2097152) {
+
+                        if(!file_exists('.\images\\')) {
+
+                            mkdir('.\images\\');
+
+                        }
+
+                        move_uploaded_file($_FILES['photo']['tmp_name'], ".\images\\" . $_FILES['photo']['name']);
+                        $_SESSION['sentCount']++;
+
+                        header('Location: .\images\\' . $_FILES['photo']['name']);
+
+                    } else {
+
+                        $message = "Выбранный файл слишком большой. Загрузите файл меньше 2 МБ.";
+
+                    }
+
+                } else {
+
+                    $message = "Неверный формат. Загрузите файл в формате png или jpg.";
 
                 }
-
-                move_uploaded_file($_FILES['photo']['tmp_name'], ".\images\\" . $_FILES['photo']['name']);
-                $_SESSION['sentCount']++;
-
-                header('Location: .\images\\' . $_FILES['photo']['name']);
 
             } catch (Exception $e) {
 
